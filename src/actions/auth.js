@@ -46,8 +46,9 @@ export const logout = () => dispatch => {
   clearAuthToken();
 };
 
-export const login = (email, password, firstTime = false) => dispatch => {
+export const login = (email, password) => dispatch => {
   dispatch(authRequest());
+  dispatch(authSuccess({ email, password }));
   // return fetch(`${API_BASE_URL}/auth/login`, {
   //   method: "POST",
   //   headers: {

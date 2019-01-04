@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { login } from "../actions/auth";
 
-export default class Login extends Component {
+export class LogIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,12 +13,12 @@ export default class Login extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log(this.state);
+    this.props.dispatch(login(this.state.email, this.state.password));
   }
 
   render() {
     return (
-      <div className="App">
+      <div className="login">
         <h2>Log in</h2>
         <form onSubmit={e => this.onSubmit(e)}>
           <label>
@@ -41,3 +43,11 @@ export default class Login extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    currentUser: state.auth.currentUser
+  };
+};
+
+export default connect(mapStateToProps)(LogIn);

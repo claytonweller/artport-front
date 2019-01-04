@@ -1,22 +1,23 @@
 import React, { Component } from "react";
 import "./App.css";
 import Login from "./LogIn";
+import { connect } from "react-redux";
+import { PortfolioEditor } from "./PortfolioEditor";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loggedIn: false
-    };
-  }
-
   render() {
     let display = <Login />;
-    if (this.state.loggedIn) {
-      display = <h1>Logged In!</h1>;
+    if (!this.props.currentUser) {
+      display = <PortfolioEditor />;
     }
     return <div className="App">{display}</div>;
   }
 }
 
-export default App;
+const mapsStateToProps = state => {
+  return {
+    currentUser: state.auth.currentUser
+  };
+};
+
+export default connect(mapsStateToProps)(App);

@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "draft-js": "^0.10.5",
+    "draftjs-to-html": "^0.8.4",
     "jwt-decode": "^2.2.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
+    "react-draft-wysiwyg": "^1.12.19",
     "react-redux": "^6.0.0",
     "react-scripts": "2.1.2",
     "redux": "^4.0.1",
