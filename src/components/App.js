@@ -7,7 +7,7 @@ import { PortfolioEditor } from "./PortfolioEditor";
 class App extends Component {
   render() {
     let display = <Login />;
-    if (!this.props.currentUser) {
+    if (this.props.currentUser) {
       display = <PortfolioEditor />;
     }
     return <div className="App">{display}</div>;

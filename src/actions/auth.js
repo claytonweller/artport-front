@@ -1,5 +1,5 @@
 import jwtDecode from "jwt-decode";
-// import { API_BASE_URL } from "../config";
+import { API_BASE_URL } from "../config";
 import { saveAuthToken, clearAuthToken } from "../local-storage";
 
 export const SET_AUTH_TOKEN = "SET_AUTH_TOKEN";
@@ -34,9 +34,8 @@ export const authError = error => ({
 // the user data stored in the token
 const storeAuthInfo = (authToken, dispatch) => {
   if (authToken) {
-    const decodedToken = jwtDecode(authToken);
     dispatch(setAuthToken(authToken));
-    dispatch(authSuccess(decodedToken.user));
+    dispatch(authSuccess("user"));
     saveAuthToken(authToken);
   }
 };
@@ -48,32 +47,31 @@ export const logout = () => dispatch => {
 
 export const login = (email, password) => dispatch => {
   dispatch(authRequest());
-  dispatch(authSuccess({ email, password }));
-  // return fetch(`${API_BASE_URL}/auth/login`, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json"
-  //   },
-  //   body: JSON.stringify({
-  //     email,
-  //     password
-  //   })
-  // })
-  //   .then(res => res.json())
-  //   .then(({ authToken }) => {
-  //     storeAuthInfo(authToken, dispatch);
-  //   })
-  //   .catch(err => {
-  //     const { code } = err;
-  //     const message =
-  //       code === 401
-  //         ? "Incorrect username or password"
-  //         : "Unable to login, please try again";
-  //     err.message = message;
-  //     dispatch(authError(err));
-  //     // Could not authenticate, so return a SubmissionError for Redux
-  //     // Form
-  //   });
+  return fetch(`${API_BASE_URL}/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email,
+      password
+    })
+  })
+    .then(res => res.json())
+    .then(({ authToken }) => {
+      storeAuthInfo(authToken, dispatch);
+    })
+    .catch(err => {
+      const { code } = err;
+      const message =
+        code === 401
+          ? "Incorrect username or password"
+          : "Unable to login, please try again";
+      err.message = message;
+      dispatch(authError(err));
+      // Could not authenticate, so return a SubmissionError for Redux
+      // Form
+    });
 };
 
 export const refreshAuthToken = () => (dispatch, getState) => {

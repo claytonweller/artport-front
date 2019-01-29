@@ -11,11 +11,11 @@ export class Bio extends Component {
     super(props);
     this.state = {
       editorState: EditorState.createEmpty(),
-      savedStuff: EditorState.createEmpty()
+      display: EditorState.createEmpty()
     };
   }
 
-  onEditorStateChange: Function = editorState => {
+  onEditorStateChange = editorState => {
     this.setState({
       editorState
     });
@@ -23,8 +23,31 @@ export class Bio extends Component {
 
   onSaveChangesClick(e) {
     let savedStuff = convertToRaw(this.state.editorState.getCurrentContent());
-    console.log(savedStuff);
-    this.setState({ savedStuff: savedStuff });
+    let jwt = localStorage.getItem("authToken");
+    fetch("http://localhost:8080/api/bio", {
+      method: "POST",
+      body: JSON.stringify(savedStuff),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwt}`
+      }
+    })
+      .then(res => res.json())
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => console.log(err));
+  }
+
+  onReturnClick(e) {
+    fetch("http://localhost:8080/api/bio")
+      .then(res => res.json())
+      .then(res => {
+        console.log(res);
+        this.setState({ savedStuff: res.data });
+      })
+      .catch(err => console.log(err));
+    console.log("return");
   }
 
   render() {
@@ -39,6 +62,7 @@ export class Bio extends Component {
           onEditorStateChange={this.onEditorStateChange}
         />
         <button onClick={() => this.onSaveChangesClick()}>save</button>
+        <button onClick={() => this.onReturnClick()}>return</button>
         <div>
           <textarea disabled value={draftToHtml(this.state.savedStuff)} />
         </div>
