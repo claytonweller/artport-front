@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import "./App.css";
 import Login from "./LogIn";
 import { connect } from "react-redux";
-import { PortfolioEditor } from "./PortfolioEditor";
+import PortfolioEditor from "./PortfolioEditor";
+import { loadAuthToken } from "../local-storage";
 
 class App extends Component {
   render() {
